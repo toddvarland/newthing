@@ -19,7 +19,7 @@ if [ -z "$REPO" ] || [ "${REPO#*/}" = "$REPO" ]; then
 fi
 
 # When piped from curl, read prompts (password, sign-in) from the terminal.
-if [ ! -t 0 ] && [ -r /dev/tty ]; then exec < /dev/tty; fi
+if [ ! -t 0 ] && (exec < /dev/tty) 2>/dev/null; then exec < /dev/tty; fi
 
 say() { printf '\n\033[1m==> %s\033[0m\n' "$*"; }
 
