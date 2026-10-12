@@ -84,6 +84,12 @@ EOF
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   fi
   eval "$(/opt/homebrew/bin/brew shellenv)"
+  if [ ! -w /opt/homebrew ]; then
+    # Homebrew allows one owner per Mac; another macOS account installed it.
+    yourturn "Homebrew on this Mac belongs to the account '$(/usr/bin/stat -f %Su /opt/homebrew 2>/dev/null || echo another)'. If you no longer use that account for Homebrew, run:"
+    printf '      sudo chown -R %s:admin /opt/homebrew\n    then run this setup command again.\n' "$USER"
+    exit 1
+  fi
   for rc in "$HOME/.zprofile" "$HOME/.bash_profile"; do
     # shellcheck disable=SC2016  # written literally into the profile, expanded at login
     grep -qs 'brew shellenv' "$rc" || echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> "$rc"
@@ -113,6 +119,13 @@ EOF
   step "Clone"
   if [ -d "$DIR/.git" ]; then
     note "already cloned: $DIR"
+  elif [ -d "$DIR" ] && [ -n "$(ls -A "$DIR")" ]; then
+    printf '  %s is not a git clone but already has files in it:\n' "$DIR"
+    ls -A "$DIR" | head -10 | sed 's/^/      /'
+    yourturn "move it aside (nothing is deleted), then run this setup command again:"
+    printf '      mv "%s" "%s-pre" && mkdir "%s"\n' "$DIR" "$DIR" "$DIR"
+    printf '    Afterwards, copy anything you need (e.g. secrets/) from %s-pre into the new clone.\n' "$DIR"
+    exit 1
   else
     mkdir -p "$(dirname "$DIR")"
     gh repo clone "$REPO" "$DIR"
