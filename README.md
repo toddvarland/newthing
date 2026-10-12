@@ -21,4 +21,9 @@ bash join.sh <owner/repo>
 4. Clones it to `~/Documents/GitHub/<repo>`.
 5. Runs the repository's own setup (`./dev join`) if it has one.
 
+**While it runs:** each stage is numbered with the elapsed time, prompts that need you are marked
+`>>> Your turn`, and everything is logged to `~/Library/Logs/newthing/` (local only). Follow along
+from another window with the `tail -f` command it prints. If it stops, it names the stage and you
+run the same command again: finished stages are skipped. A notification appears when it ends.
+
 It contains no secrets. You need an invitation to the private repository.
