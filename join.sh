@@ -8,7 +8,7 @@
 #   less join.sh && bash join.sh <owner/repo>
 #
 # Steps: Homebrew (official installer), GitHub CLI, browser sign-in to GitHub, access check,
-# clone into ~/Documents/GitHub/<repo>, then hand over to the repo's own "./ip join" if present.
+# clone into ~/Documents/GitHub/<repo>, then hand over to the repo's own "./dev join" (or older "./ip join") if present.
 # Contains no secrets; everything project-specific lives in the private repository.
 set -euo pipefail
 
@@ -60,7 +60,10 @@ else
 fi
 
 cd "$DIR"
-if [ -x ./ip ]; then
+if [ -x ./dev ]; then
+  say "Project setup (./dev join)"
+  exec ./dev join
+elif [ -x ./ip ]; then
   say "Project setup (./ip join)"
   exec ./ip join
 fi

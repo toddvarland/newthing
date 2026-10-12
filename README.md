@@ -19,6 +19,6 @@ bash join.sh <owner/repo>
 2. Signs you in to GitHub in your browser.
 3. Checks that you have access to the repository.
 4. Clones it to `~/Documents/GitHub/<repo>`.
-5. Runs the repository's own setup (`./ip join`) if it has one.
+5. Runs the repository's own setup (`./dev join`) if it has one.
 
 It contains no secrets. You need an invitation to the private repository.
